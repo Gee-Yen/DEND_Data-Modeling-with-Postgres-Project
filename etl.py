@@ -9,7 +9,7 @@ def process_song_file(cur, filepath):
     """
     Reads the song json file and insert data to the respective columns in the songs and artist tables.
     
-    Arguments:
+    Parameters:
       cur - cursor.
       filepath - path of the files to be processed.
       
@@ -31,7 +31,7 @@ def process_log_file(cur, filepath):
     """
     Reads the log json file and insert data to the respective columns in the time, user and songplays tables.
     
-    Arguments:
+    Parameters:
       cur - cursor.
       filepath - path of the files to be processed.
       
@@ -47,7 +47,7 @@ def process_log_file(cur, filepath):
     t = pd.to_datetime(df['ts'], unit='ms')
     
     # insert time data records
-    time_data = (t.dt.time, t.dt.hour, t.dt.day, t.dt.week, t.dt.month, t.dt.year, t.dt.weekday)
+    time_data = (t, t.dt.hour, t.dt.day, t.dt.week, t.dt.month, t.dt.year, t.dt.weekday)
     column_labels = ('time', 'hour', 'day', 'week', 'month', 'year', 'weekday')
     time_df = pd.DataFrame.from_dict(dict(zip(column_labels, time_data)))
 
@@ -74,7 +74,7 @@ def process_log_file(cur, filepath):
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = (index, pd.to_datetime(row.ts, unit='ms'), row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
+        songplay_data = (pd.to_datetime(row.ts, unit='ms'), row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
         cur.execute(songplay_table_insert, songplay_data)
 
 
@@ -82,7 +82,7 @@ def process_data(cur, conn, filepath, func):
     """
     Retrieves all the json files from the filepath and then processes the data by the corresponding func.
     
-    Arguments:
+    Parameters:
       cur - cursor.
       conn - connection to the database.
       filepath - path of the files to be processed.
@@ -112,7 +112,7 @@ def main():
     """
     Connects to the sparkify database and processes the song and log file.
     
-    Arguments:
+    Parameters:
       N/A
       
     Returns: None.  
