@@ -60,7 +60,7 @@ time_table_create = ("""
 CREATE TABLE IF NOT EXISTS time 
 ( 
   start_time TIMESTAMP PRIMARY KEY, 
-  hour INT CHECK, 
+  hour INT, 
   day INT, 
   week INT, 
   month INT, 
@@ -79,7 +79,7 @@ values(%s, %s, %s, %s, %s, %s, %s, %s)
 user_table_insert = ("""
 INSERT INTO users(user_id, first_name, last_name, gender, level) 
 values(%s, %s, %s, %s, %s)
-ON CONFLICT(user_id) DO NOTHING
+ON CONFLICT(user_id) DO UPDATE SET level = excluded.level
 """)
 
 song_table_insert = ("""
